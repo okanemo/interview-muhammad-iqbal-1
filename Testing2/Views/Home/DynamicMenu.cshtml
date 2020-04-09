@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+@using Microsoft.AspNetCore.Http;
+
+
+    <p>UserName : @Context.Session.GetString("UserName")  - Name : @Context.Session.GetString("Name")</p>
+    <p>RoleName : @Context.Session.GetString("RoleName")</p>
+    <p>Ini @ViewData["Menu"]</p>

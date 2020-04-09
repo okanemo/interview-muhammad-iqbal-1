@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+@using (Html.BeginForm("Login", "Home", FormMethod.Post))
+{
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+
+            <!-- Login Form -->
+            <form>
+                <input type="text" id="UserName" class="fadeIn second" name="UserName" placeholder="UserName">
+                <input type="password" id="Password" class="fadeIn third" name="Password" placeholder="Password">
+                <input type="submit" class="fadeIn fourth" value="Log In">
+            </form>
+
+        </div>
+    </div>
+}
+
