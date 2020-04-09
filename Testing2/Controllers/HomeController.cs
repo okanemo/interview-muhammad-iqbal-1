@@ -23,6 +23,9 @@ namespace Testing2.Controllers
         public IActionResult Index()
         {
             var menu = GetMenu();
+            if (HttpContext.Session.GetString("UserName") == null && HttpContext.Session.GetString("Name") == null && HttpContext.Session.GetString("RoleId") == null && HttpContext.Session.GetString("RoleName") == null)
+                menu = null;
+                
             var vm = new ViewModel() { Menu = menu };
             return View(vm);
         }
@@ -37,6 +40,9 @@ namespace Testing2.Controllers
         [HttpPost]
         public IActionResult Login(Models.Login request)
         {
+            if(request.Password == null)
+                return RedirectToAction("ErrorLogin");
+
             var checkUser = _context.Users.FirstOrDefault(x => x.UserName.Contains(request.UserName));
             /* Extract the bytes */
             byte[] hashBytes = Convert.FromBase64String(checkUser.Password);
@@ -67,9 +73,10 @@ namespace Testing2.Controllers
             return RedirectToAction("DynamicMenu", "Home", new { linkmenu = $"{menu.LinkText}" });
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult DynamicMenu(string linkmenu)
         {
-            if (HttpContext.Session.GetString("UserName") == null && HttpContext.Session.GetString("Name") == null)
+            if (HttpContext.Session.GetString("UserName") == null && HttpContext.Session.GetString("Name") == null && HttpContext.Session.GetString("RoleId") == null && HttpContext.Session.GetString("RoleName") == null)
                 return RedirectToAction("ErrorAccess");
 
             var checkAccess = _context.AccessMenu.Where(x => x.RoleId == int.Parse(HttpContext.Session.GetString("RoleId"))).ToList();
@@ -128,8 +135,8 @@ namespace Testing2.Controllers
         public IActionResult ErrorAccess()
         {
             Menu menu = null;
-            if (HttpContext.Session.GetString("UserName") != null && HttpContext.Session.GetString("Name") != null)
-                menu = GetMenu(); 
+            if (HttpContext.Session.GetString("UserName") != null && HttpContext.Session.GetString("Name") != null && HttpContext.Session.GetString("RoleId") != null && HttpContext.Session.GetString("RoleName") != null)
+                menu = GetMenu();
 
             var vm = new ViewModel() { Menu = menu };
             return View(vm);
@@ -139,6 +146,8 @@ namespace Testing2.Controllers
         {
             HttpContext.Session.Remove("UserName");
             HttpContext.Session.Remove("Name");
+            HttpContext.Session.Remove("RoleId");
+            HttpContext.Session.Remove("RoleName");
             return RedirectToAction("Login");
         }
     }

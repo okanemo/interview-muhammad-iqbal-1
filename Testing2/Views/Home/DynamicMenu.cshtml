@@ -4,7 +4,10 @@
 
 @using Microsoft.AspNetCore.Http;
 
-
+@if (Context.Session.GetString("UserName") != null && Context.Session.GetString("Name") != null && Context.Session.GetString("RoleId") != null && Context.Session.GetString("RoleName") != null)
+{
     <p>UserName : @Context.Session.GetString("UserName")  - Name : @Context.Session.GetString("Name")</p>
     <p>RoleName : @Context.Session.GetString("RoleName")</p>
     <p>Ini @ViewData["Menu"]</p>
+}
+

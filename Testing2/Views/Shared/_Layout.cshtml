@@ -1,4 +1,5 @@
 ﻿@model Testing2.Models.ViewModel
+@using Microsoft.AspNetCore.Http;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,16 +21,25 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (Model.Menu != null)
+                        @if (Context.Session.GetString("UserName") != null && Context.Session.GetString("Name") != null && Context.Session.GetString("RoleId") != null && Context.Session.GetString("RoleName") != null)
                         {
-                            @foreach (var item in @Model.Menu.Items)
+                            if (Model.Menu != null)
                             {
+                                @foreach (var item in @Model.Menu.Items)
+                                {
+                                    <li class="nav-item">
+                                        @Html.ActionLink(@item.LinkText, @item.ActionName, @item.ControllerName, new { @linkmenu = @item.LinkText }, new { @class = "nav-link text-dark" })
+                                    </li>
+                                }
                                 <li class="nav-item">
-                                    @Html.ActionLink(@item.LinkText, @item.ActionName, @item.ControllerName, new { @linkmenu = @item.LinkText }, new { @class = "nav-link text-dark" })
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
                                 </li>
                             }
+                        }
+                        else
+                        {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
                             </li>
                         }
                     </ul>
